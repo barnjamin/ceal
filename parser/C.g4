@@ -14,6 +14,7 @@ function: type ID '(' params ')' '{' stmt* '}';
 struct: 'struct' ID '{' field* '}';
 field: type ID ';';
 
+
 type: const? ID;
 params: (param (',' param)*)?;
 param: type ID;
@@ -34,7 +35,10 @@ stmt:
     | 'switch' '(' expr ')' '{' case* default? '}'                  # SwitchStmt
     | 'break' ';'                                                   # BreakStmt
     | 'continue' ';'                                                # ContinueStmt
+    | asm ';'                                                       # AsmStmt
     ;
+
+asm: 'asm' ~'{'* '{' ~'}'* '}' ;
 
 expr:
     ID incdec                   # PostIncDecExpr
@@ -95,6 +99,7 @@ incdec: ('++' | '--');
 INT: [0-9]+;
 STRING: '"' ( ~["\\] | '\\' . )* '"' ;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
-WS: [ \t\r\n]+ -> skip;
+WS: [ \t]+ -> skip;
+NEWLINE: [\r?\n]+ -> skip;
 SINGLE_COMMENT: '//' .*? '\n' -> skip;
 MULTILINE_COMMENT: '/*' .*? '*/' -> skip;

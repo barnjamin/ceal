@@ -3,6 +3,7 @@ package compiler
 import (
 	"ceal/parser"
 	"fmt"
+	"log"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 )
@@ -86,6 +87,23 @@ func (v *AstVisitor) VisitAssign_expr(ctx *parser.Assign_exprContext) interface{
 		Value: v.visitStatement(ctx.Expr()),
 	}
 
+	return ast
+}
+
+func (v *AstVisitor) VisitAsmStmt(ctx *parser.AsmStmtContext) interface{} {
+	log.Printf("ast: %+v", ctx.Asm().GetPayload())
+
+	for _, child := range ctx.Asm().GetChildren() {
+		ptc := child.(antlr.ParseTree)
+		log.Printf("top %+v", ptc.GetPayload())
+		for _, t := range child.GetChildren() {
+			pt := t.(antlr.ParseTree)
+			log.Printf("inner %+v", pt.GetPayload())
+		}
+	}
+	ast := &CealAsm{
+		Lines: []string{"int 42"},
+	}
 	return ast
 }
 

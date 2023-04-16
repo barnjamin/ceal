@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"fmt"
+	"strings"
 )
 
 type CealProgram struct {
@@ -64,6 +65,14 @@ func (a *CealProgram) String() string {
 	res.Write(main)
 
 	return res.String()
+}
+
+type CealAsm struct {
+	Lines []string
+}
+
+func (a *CealAsm) String() string {
+	return strings.Join(a.Lines, "\n")
 }
 
 type CealContinue struct {

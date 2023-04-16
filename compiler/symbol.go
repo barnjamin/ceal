@@ -164,7 +164,12 @@ func (v *SymbolTableVisitor) VisitFunction(ctx *parser.FunctionContext) interfac
 	}
 
 	ret := ctx.Type_().ID().GetText()
+
 	t := v.scope.resolveType(ret)
+
+	if t == nil {
+		panic(fmt.Sprintf("Cannot resolve type: %s", ret))
+	}
 
 	fun := &Function{
 		t:    ret,
